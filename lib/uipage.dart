@@ -35,6 +35,11 @@ class _UIPageState extends State<UIPage> {
   ];
 
   //var color = (Colors.deepPurple[50]);
+  ScrollController controller = ScrollController();
+  var height;
+  var width;
+  double topContainer = 0;
+  bool closeTopContainer = false;
   bool loadAllFav = false;
   var color1 = Color(0xFF7041EE);
   var color = Color(0xFFE9E9FF);
@@ -44,10 +49,29 @@ class _UIPageState extends State<UIPage> {
   ).createShader(Rect.fromLTWH(100.0, 0.0, 200.0, 70.0));
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    
+    controller.addListener(() {
+      setState(() {
+        double value = controller.offset/(height*0.18*0.7);
+        topContainer = value;
+        closeTopContainer = controller.offset > 100;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    var height = size.height;
-    var width = size.width;
+    
+    setState(() {
+         height = size.height;
+         width = size.width;
+    });
+    var containerHeight = height*0.751;
     return SafeArea(
       child: Scaffold(
         // appBar: AppBar(
@@ -55,242 +79,258 @@ class _UIPageState extends State<UIPage> {
         // ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: width * 0.04),
-          child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Flux.",
-                        style: GoogleFonts.montserrat(
-                          fontSize: height * 0.07,
-                          fontWeight: FontWeight.bold,
-                          foreground: Paint()..shader = linearGradientText,
-                          // textStyle:
-                          //     TextStyle(color: Colors.blue, letterSpacing: .5),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: height * 0.06,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.01, vertical: height * 0.002),
-                      margin: EdgeInsets.fromLTRB(0, height * 0.01, 0, 0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade500,
-                            blurRadius: width * 0.005,
-                            spreadRadius: width * 0.009,
-                            offset: Offset(width * 0.007, height * 0.005),
-                          ),
-                        ],
-                        border: Border.all(
-                          color: color1,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        color: color,
-                      ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search for my favorite brand",
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: height * 0.05,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    Container(
-                      child: Text(
-                        "Category",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: height * 0.03,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height * 0.015,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: closeTopContainer ? 0 : 1,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    //width: width,
+                    alignment: Alignment.topCenter,
+                    height: closeTopContainer ? 0 : (loadAllFav? height*0.741 + height * (0.35-0.21): height * 0.741),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        catagories(
-                          "Food",
-                          "assets/images/food.svg",
-                          height,
-                          width,
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Flux.",
+                            style: GoogleFonts.montserrat(
+                              fontSize: height * 0.07,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()..shader = linearGradientText,
+                              // textStyle:
+                              //     TextStyle(color: Colors.blue, letterSpacing: .5),
+                            ),
+                          ),
                         ),
-                        catagories(
-                          "Fashion",
-                          "assets/images/fashion.svg",
-                          height,
-                          width,
-                        ),
-                        catagories(
-                          "Fitness",
-                          "assets/images/fitness.svg",
-                          height,
-                          width,
-                        ),
-                        catagories(
-                          "Entertainment",
-                          "assets/images/entertainment.svg",
-                          height,
-                          width,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.015,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        catagories(
-                          "Museum",
-                          "assets/images/museum.svg",
-                          height,
-                          width,
-                        ),
-                        catagories(
-                          "Logistics",
-                          "assets/images/logistics.svg",
-                          height,
-                          width,
-                        ),
-                        catagories(
-                          "Travel",
-                          "assets/images/travel.svg",
-                          height,
-                          width,
-                        ),
-                        catagories(
-                          "Grocery",
-                          "assets/images/grocery.svg",
-                          height,
-                          width,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: height * 0.02,
-                    ),
-                    Container(
-                      child: Text(
-                        "Favorites",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: height * 0.03,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: height * 0.018,
-                    ),
-                    Container(
-                      height: loadAllFav ? height * 0.35 : height * 0.21,
-                      padding: EdgeInsets.fromLTRB(
-                          width * 0.013, height * 0.010, width * 0.013, 0),
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            //margin: EdgeInsets.only(bottom: 10),
-                            height:
-                                loadAllFav ? height * 0.264 : height * 0.125,
-                            child: GridView.builder(
-                              itemCount:
-                                  loadAllFav ? fav.length : min(fav.length, 5),
-                              //padding: EdgeInsets.zero,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                mainAxisExtent: height * 0.12,
-                                crossAxisCount: 5,
-                                crossAxisSpacing: 0,
-                                mainAxisSpacing: 0,
+                        Container(
+                          height: height * 0.06,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.01, vertical: height * 0.002),
+                          margin: EdgeInsets.fromLTRB(0, height * 0.01, 0, 0),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.shade500,
+                                blurRadius: width * 0.005,
+                                spreadRadius: width * 0.009,
+                                offset: Offset(width * 0.007, height * 0.005),
                               ),
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.shade500,
-                                            spreadRadius: width * 0.007,
-                                            blurRadius: width * 0.005,
-                                            offset: Offset(
-                                                width * 0.007, height * 0.005),
+                            ],
+                            border: Border.all(
+                              color: color1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            color: color,
+                          ),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintStyle: TextStyle(
+                                color: color1,
+                              ),
+                              hintText: "Search for my favorite brand",
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: height * 0.05,
+                                color: color1,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        Container(
+                          child: Text(
+                            "Category",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: height * 0.03,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.015,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            catagories(
+                              "Food",
+                              "assets/images/food.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Fashion",
+                              "assets/images/fashion.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Fitness",
+                              "assets/images/fitness.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Entertainment",
+                              "assets/images/entertainment.svg",
+                              height,
+                              width,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: height * 0.015,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            catagories(
+                              "Museum",
+                              "assets/images/museum.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Logistics",
+                              "assets/images/logistics.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Travel",
+                              "assets/images/travel.svg",
+                              height,
+                              width,
+                            ),
+                            catagories(
+                              "Grocery",
+                              "assets/images/grocery.svg",
+                              height,
+                              width,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        Container(
+                          child: Text(
+                            "Favorites",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: height * 0.03,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.018,
+                        ),
+                        Container(
+                          height: loadAllFav ? height * 0.35 : height * 0.21,
+                          padding: EdgeInsets.fromLTRB(
+                              width * 0.013, height * 0.010, width * 0.013, 0),
+                          decoration: BoxDecoration(
+                            color: color,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                //margin: EdgeInsets.only(bottom: 10),
+                                height:
+                                    loadAllFav ? height * 0.264 : height * 0.125,
+                                child: GridView.builder(
+                                  itemCount:
+                                      loadAllFav ? fav.length : min(fav.length, 5),
+                                  //padding: EdgeInsets.zero,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    mainAxisExtent: height * 0.12,
+                                    crossAxisCount: 5,
+                                    crossAxisSpacing: 0,
+                                    mainAxisSpacing: 0,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.shade500,
+                                                spreadRadius: width * 0.007,
+                                                blurRadius: width * 0.005,
+                                                offset: Offset(
+                                                    width * 0.007, height * 0.005),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      height: height * 0.07,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          "https://img.etimg.com/thumb/msid-59738997,width-640,resizemode-4,imgsize-21421/nike.jpg",
+                                          height: height * 0.07,
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                              "https://img.etimg.com/thumb/msid-59738997,width-640,resizemode-4,imgsize-21421/nike.jpg",
+                                            ),
+                                            backgroundColor: color,
+                                            radius: height * 0.11,
+                                          ),
                                         ),
-                                        backgroundColor: color,
-                                        radius: height * 0.11,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: height * 0.009,
-                                    ),
-                                    Text(
-                                      fav[index]['title'],
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: height * 0.022,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                                        SizedBox(
+                                          height: height * 0.009,
+                                        ),
+                                        Text(
+                                          fav[index]['title'],
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: height * 0.022,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              Divider(
+                                color: Colors.white,
+                                height: 1,
+                                thickness: 2,
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    loadAllFav = !loadAllFav;
+                                  });
+                                },
+                                icon: Icon(
+                                  loadAllFav
+                                      ? Icons.keyboard_arrow_up_sharp
+                                      : Icons.keyboard_arrow_down_sharp,
+                                  color: Colors.purple,
+                                  size: height * 0.03,
+                                ),
+                              ),
+                            ],
                           ),
-                          Divider(
-                            color: Colors.white,
-                            height: 1,
-                            thickness: 2,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                loadAllFav = !loadAllFav;
-                              });
-                            },
-                            icon: Icon(
-                              loadAllFav
-                                  ? Icons.keyboard_arrow_up_sharp
-                                  : Icons.keyboard_arrow_down_sharp,
-                              color: Colors.purple,
-                              size: height * 0.03,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        // SizedBox(
+                        //   height: height * 0.018 ,
+                        // ),
+                      ],
                     ),
-                    SizedBox(
-                      height: height * 0.018,
-                    ),
-                  ],
+                  ),
+                ),
+                SizedBox(
+                  height:  height * 0.01,
                 ),
                 Container(
                   child: Text(
@@ -353,18 +393,41 @@ class _UIPageState extends State<UIPage> {
                 //     ],
                 //   ),
                 //),
+
+
+
                 Container(
                   height: 500,
                   child: Expanded(
                       child: ListView.builder(
-                          //controller: controller,
-                          itemCount: 5,
+                          controller: controller,
+                          itemCount: 15,
                           physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return card(
-                              [Color(0xFFFFCF71), Color(0xFF2376DD)],
-                              height,
-                              width,
+                            double scale = 1.0;
+                        if (topContainer > 0.5) {
+                          scale = index + 0.5 - topContainer;
+                          if (scale < 0) {
+                            scale = 0;
+                          } else if (scale > 1) {
+                            scale = 1;
+                          }
+                        }
+                            return Opacity(
+                              opacity: scale,
+                              child: Transform(
+                                transform:  Matrix4.identity()..scale(scale,scale),
+                              alignment: Alignment.bottomCenter,
+                                child: Align(
+                                  heightFactor: 0.7,
+                                  alignment: Alignment.topCenter,
+                                  child: card(
+                                    [Color(0xFFFFCF71), Color(0xFF2376DD)],
+                                    height,
+                                    width,
+                                  ),
+                                ),
+                              ),
                             );
                           })),
                 ),
@@ -373,7 +436,7 @@ class _UIPageState extends State<UIPage> {
                 ),
               ],
             ),
-          ),
+          
         ),
       ),
     );
