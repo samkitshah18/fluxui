@@ -16,9 +16,9 @@ class _UIPageState extends State<UIPage> {
     {'url': 'assets/images/adidas.png', 'title': 'adidas'},
     {'url': 'assets/images/airbnb.png', 'title': 'Airbnb'},
     {'url': 'assets/images/coldstone.png', 'title': 'Cold Stone'},
-    {'url': 'assets/images/fl.png', 'title': 'Foot Lock'},
-    {'url': 'assets/images/hnm.png', 'title': 'H & M'},
-    {'url': 'assets/images/ikea.png', 'title': 'Ikea'},
+    // {'url': 'assets/images/fl.png', 'title': 'Foot Lock'},
+    // {'url': 'assets/images/hnm.png', 'title': 'H & M'},
+    // {'url': 'assets/images/ikea.png', 'title': 'Ikea'},
     // {'url': 'assets/images/mcd.png', 'title': 'MC Donalds'},
     // {'url': 'assets/images/adidas.png', 'title': 'adidas'},
     // {'url': 'assets/images/airbnb.png', 'title': 'Airbnb'},
@@ -112,41 +112,49 @@ class _UIPageState extends State<UIPage> {
                         ),
                       ),
                     ),
-                    Container(
-                      height: height * 0.06,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.01, vertical: height * 0.002),
-                      margin: EdgeInsets.fromLTRB(0, height * 0.01, 0, 0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade500,
-                            blurRadius: width * 0.005,
-                            spreadRadius: width * 0.009,
-                            offset: Offset(width * 0.007, height * 0.005),
-                          ),
-                        ],
-                        border: Border.all(
-                          color: color1,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                        color: color,
-                      ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(
+                    // Material(
+                    //   elevation: 5,
+                    //   child: 
+                      Container(
+                        height: height * 0.06,
+                        width: width * 0.91,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: width * 0.01, vertical: height * 0.002),
+                        margin: EdgeInsets.fromLTRB(0, height * 0.01, 0, 0),
+                        decoration: BoxDecoration(
+                          boxShadow:
+                          //kElevationToShadow[4],
+                           [
+                            BoxShadow(
+                              color: Colors.grey.shade500,
+                              blurRadius: width * 0.005,
+                              spreadRadius: width * 0.0005,
+                              offset: Offset(width * 0.007, height * 0.005),
+                            ),
+                          ],
+                          border: Border.all(
                             color: color1,
                           ),
-                          hintText: "Search for my favorite brand",
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: height * 0.05,
-                            color: color1,
+                          borderRadius: BorderRadius.circular(width * 0.03),
+                          color: color,
+                        ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                              color: color1,
+                              fontSize: height * 0.024,
+                            ),
+                            hintText: "Search for my favorite brand",
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: height * 0.045,
+                              color: color1,
+                            ),
+                            border: InputBorder.none,
                           ),
-                          border: InputBorder.none,
                         ),
                       ),
-                    ),
+                    //),
                     SizedBox(
                       height: height * 0.02,
                     ),
@@ -254,6 +262,7 @@ class _UIPageState extends State<UIPage> {
                           SizedBox(
                             height: height * 0.01,
                           ),
+                          if(fav.length >= 5)
                           favContainer(5, min(fav.length, 10))
                         ],
                       ),
@@ -283,17 +292,18 @@ class _UIPageState extends State<UIPage> {
               ),
 
               Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 0, height * 0.015),
-                //height: 500,
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                height: 500,
+                //! Change height 
                 //height: !expand ? height * 0.2 : height * 0.18 * 14 * 0.7 + height * 0.18,
-                height: expand ? height * 0.3 : height,
+                //height: expand ? height * 0.3 : height,
                 child: Flex(
                   direction: Axis.vertical,
                   children: [
                     Expanded(
                         child: ListView.builder(
                             controller: controller,
-                            itemCount: 1,
+                            itemCount: 10,
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               double scale = 1.0;
@@ -348,7 +358,7 @@ class _UIPageState extends State<UIPage> {
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.shade500,
-                        spreadRadius: width * 0.007,
+                        spreadRadius: width * 0.005,
                         blurRadius: width * 0.005,
                         offset: Offset(width * 0.007, height * 0.005),
                       ),
@@ -389,7 +399,7 @@ class _UIPageState extends State<UIPage> {
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.shade500,
-                spreadRadius: width * 0.01,
+                spreadRadius: width * 0.005,
                 blurRadius: width * 0.01,
                 offset: Offset(width * 0.007, height * 0.005),
               ),
